@@ -17,7 +17,7 @@ const LandingHero = () => {
               </h2>
             </div>
             <Link
-              to={"/login"}
+              to={"/auth"}
               className="w-fit bg-yellow-500 hover:bg-yellow-600 transition-all duration-100 ease-in-out px-6 py-2 rounded-md font-medium cursor-pointer"
             >
               Get Started
