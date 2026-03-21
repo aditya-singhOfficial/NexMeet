@@ -8,7 +8,7 @@ const LandingHero = () => {
         <div className="w-[47%] flex flex-col gap-8 h-[75vh] justify-center">
           <div className="w-full flex flex-col gap-12">
             <div className="w-full flex flex-col gap-1">
-              <h1 className="text-7xl tracking-wide font-medium leading-tight">
+              <h1 className="text-7xl tracking-wide font-bold leading-tight">
                 <span className="text-yellow-500">Connect</span> with your Loved
                 Ones
               </h1>
