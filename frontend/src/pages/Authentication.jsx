@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import backgroundImg from "../assets/background1.png";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 const Authentication = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("mode");
+  console.log(query);
+  const [isLogin, setIsLogin] = useState(query !== "signup");
+
+  useEffect(() => {
+    setIsLogin(query !== "signup");
+  }, [query]);
 
   return (
     <>
@@ -37,16 +44,20 @@ const Authentication = () => {
                 <div className="flex gap-6 items-center ">
                   <button
                     onClick={() => setIsLogin(true)}
-                    className={`font-medium px-2 py-1 rounded-sm ${
-                      isLogin ? "bg-blue-500 text-white" : "text-gray-400"
+                    className={`font-medium px-2 py-1 cursor-pointer rounded-sm ${
+                      isLogin
+                        ? "bg-blue-500 text-white"
+                        : "text-gray-400 hover:text-blue-500"
                     }`}
                   >
                     Sign In
                   </button>
                   <button
                     onClick={() => setIsLogin(false)}
-                    className={`font-medium px-2 py-1 rounded-sm ${
-                      !isLogin ? "bg-blue-500 text-white" : "text-gray-400"
+                    className={`font-medium px-2 py-1 cursor-pointer rounded-sm ${
+                      !isLogin
+                        ? "bg-blue-500 text-white"
+                        : "text-gray-400 hover:text-blue-500"
                     }`}
                   >
                     Sign Up

@@ -8,16 +8,16 @@ const Navbar = () => {
           <Link to={"/"}>NexMeet</Link>
         </h1>
         <div className="flex gap-8 items-center text-[17px]">
-          <Link to={"#"} className="hover:text-yellow-500" >
+          <Link to={"#"} className="hover:text-yellow-500">
             Join as Guest
           </Link>
 
-          <Link to={"/auth"} className="hover:text-yellow-500">
+          <Link to={"/auth?mode=signup"} className="hover:text-yellow-500">
             Register
           </Link>
 
           <Link
-            to={"/auth"}
+            to={"/auth?mode=signin"}
             className="bg-yellow-500 hover:bg-yellow-600 transition-all duration-100 ease-in-out px-6 py-2 rounded-md font-medium cursor-pointer"
           >
             Login
