@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import mobileImg from "../assets/mobile.png";
+import mobileImg from "../assets/mobile1.png";
 const LandingHero = () => {
   return (
     <>

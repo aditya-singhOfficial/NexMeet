@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import background from "../assets/background.png";
+import background from "../assets/background1.png";
 import LandingHero from "../components/LandingHero";
 const Landing = () => {
   return (
@@ -14,7 +14,7 @@ const Landing = () => {
           backgroundPosition: `bottom`,
         }}
       >
-        <div className="w-full h-full bg-black/35 ">
+        <div className="w-full h-full bg-black/25 ">
           <Navbar />
           <LandingHero />
         </div>
