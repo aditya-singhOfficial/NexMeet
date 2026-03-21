@@ -14,7 +14,7 @@ const Landing = () => {
           backgroundPosition: `bottom`,
         }}
       >
-        <div className="w-full h-full bg-black/50 backdrop-blur-sm">
+        <div className="w-full h-full bg-black/35 ">
           <Navbar />
           <LandingHero />
         </div>

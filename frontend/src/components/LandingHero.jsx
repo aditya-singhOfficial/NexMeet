@@ -24,8 +24,8 @@ const LandingHero = () => {
             </Link>
           </div>
         </div>
-        <div className="w-[44%] flex justify-center">
-            <img className="" src={mobileImg} alt="" />
+        <div className="w-[44%] flex justify-center items-center">
+          <img className="block w-full max-h-145 object-contain" src={mobileImg} alt="" />
         </div>
       </div>
     </>
