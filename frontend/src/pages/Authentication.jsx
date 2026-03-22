@@ -35,8 +35,8 @@ const Authentication = () => {
                 </div>
               </div>
             </div>
-            <div className="w-[40%] h-full text-white bg-white/10 py-4 rounded-md">
-              <div className="flex flex-col items-center gap-8 pt-6">
+            <div className="w-[40%] h-full text-white bg-white/10 py-3 rounded-md">
+              <div className="flex flex-col items-center gap-4 pt-4">
                 <LockOpenIcon
                   sx={{ fontSize: 36, color: `white` }}
                   className="bg-purple-500 px-2 py-1 rounded-full font-black"
@@ -82,7 +82,7 @@ export default Authentication;
 const SignUpTemplate = ({ setIsLogin }) => {
   return (
     <>
-      <form action="#" method="post" className="flex flex-col gap-7 px-6 pt-3">
+      <form action="#" method="post" className="flex flex-col gap-6 px-6 pt-2">
         <div className="flex flex-col gap-3">
           <label className="pl-1" htmlFor="email">
             Name:
@@ -94,13 +94,13 @@ const SignUpTemplate = ({ setIsLogin }) => {
           />
         </div>
         <div className="flex flex-col gap-3">
-          <label className="pl-1" htmlFor="email">
+          <label className="pl-1" htmlFor="username">
             Username:
           </label>
           <input
             className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md"
-            type="email"
-            placeholder="Enter Email Address"
+            type="text"
+            placeholder="Enter Username"
           />
         </div>
         <div className="flex flex-col gap-3">
@@ -140,13 +140,13 @@ const LoginTemplate = ({ setIsLogin }) => {
     <>
       <form action="#" method="post" className="flex flex-col gap-8 px-6 pt-4">
         <div className="flex flex-col gap-3">
-          <label className="pl-1" htmlFor="email">
-            Email:
+          <label className="pl-1" htmlFor="username">
+            Username:
           </label>
           <input
             className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md"
-            type="email"
-            placeholder="Enter Email Address"
+            type="text"
+            placeholder="Enter Username"
           />
         </div>
         <div className="flex flex-col gap-3">
