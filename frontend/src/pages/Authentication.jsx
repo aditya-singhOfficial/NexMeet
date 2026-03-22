@@ -8,9 +8,19 @@ const Authentication = () => {
   const query = searchParams.get("mode");
   console.log(query);
   const [isLogin, setIsLogin] = useState(query !== "signup");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState();
+  const [messages, setMessages] = useState();
+
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     setIsLogin(query !== "signup");
+    setUsername("");
+    setName("");
+    setPassword("");
   }, [query]);
 
   return (
@@ -42,8 +52,8 @@ const Authentication = () => {
                   className="bg-purple-500 px-2 py-1 rounded-full font-black"
                 />
                 <div className="flex gap-6 items-center ">
-                  <button
-                    onClick={() => setIsLogin(true)}
+                  <Link
+                    to={"/auth?mode=signin"}
                     className={`font-medium px-2 py-1 cursor-pointer rounded-sm ${
                       isLogin
                         ? "bg-blue-500 text-white"
@@ -51,9 +61,9 @@ const Authentication = () => {
                     }`}
                   >
                     Sign In
-                  </button>
-                  <button
-                    onClick={() => setIsLogin(false)}
+                  </Link>
+                  <Link
+                    to={"/auth?mode=signup"}
                     className={`font-medium px-2 py-1 cursor-pointer rounded-sm ${
                       !isLogin
                         ? "bg-blue-500 text-white"
@@ -61,13 +71,24 @@ const Authentication = () => {
                     }`}
                   >
                     Sign Up
-                  </button>
+                  </Link>
                 </div>
               </div>
               {isLogin ? (
-                <LoginTemplate setIsLogin={setIsLogin} />
+                <LoginTemplate
+                  setError={setError}
+                  setPassword={setPassword}
+                  setUsername={setUsername}
+                  setIsLogin={setIsLogin}
+                />
               ) : (
-                <SignUpTemplate setIsLogin={setIsLogin} />
+                <SignUpTemplate
+                  setError={setError}
+                  setPassword={setPassword}
+                  setName={setName}
+                  setUsername={setUsername}
+                  setIsLogin={setIsLogin}
+                />
               )}
             </div>
           </div>
@@ -79,7 +100,13 @@ const Authentication = () => {
 
 export default Authentication;
 
-const SignUpTemplate = ({ setIsLogin }) => {
+const SignUpTemplate = ({
+  setIsLogin,
+  setError,
+  setPassword,
+  setName,
+  setUsername,
+}) => {
   return (
     <>
       <form action="#" method="post" className="flex flex-col gap-6 px-6 pt-2">
@@ -89,8 +116,12 @@ const SignUpTemplate = ({ setIsLogin }) => {
           </label>
           <input
             className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md"
-            type="email"
+            type="text"
             placeholder="Enter Full Name"
+            required
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
           />
         </div>
         <div className="flex flex-col gap-3">
@@ -101,6 +132,10 @@ const SignUpTemplate = ({ setIsLogin }) => {
             className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md"
             type="text"
             placeholder="Enter Username"
+            required
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
           />
         </div>
         <div className="flex flex-col gap-3">
@@ -111,6 +146,10 @@ const SignUpTemplate = ({ setIsLogin }) => {
             className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md"
             type="password"
             placeholder="Enter Password"
+            required
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
           />
         </div>
         <input
@@ -135,7 +174,7 @@ const SignUpTemplate = ({ setIsLogin }) => {
   );
 };
 
-const LoginTemplate = ({ setIsLogin }) => {
+const LoginTemplate = ({ setIsLogin, setError, setPassword, setUsername }) => {
   return (
     <>
       <form action="#" method="post" className="flex flex-col gap-8 px-6 pt-4">
@@ -147,6 +186,10 @@ const LoginTemplate = ({ setIsLogin }) => {
             className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md"
             type="text"
             placeholder="Enter Username"
+            required
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
           />
         </div>
         <div className="flex flex-col gap-3">
@@ -157,6 +200,10 @@ const LoginTemplate = ({ setIsLogin }) => {
             className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md"
             type="password"
             placeholder="Enter Password"
+            required
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
           />
         </div>
         <input
