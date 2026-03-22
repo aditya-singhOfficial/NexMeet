@@ -20,7 +20,7 @@ const register = async (req, res) => {
         const existingUser = await User.findOne({ username });
         if (existingUser) {
             return res
-                .status(httpStatus.FOUND)
+                .status(httpStatus.CONFLICT)
                 .json({
                     "message": "User already exists",
                     "success": false
@@ -80,19 +80,25 @@ const login = async (req, res) => {
                 });
         }
 
-        if (bcrypt.compare(password, user.password)) {
-            let token = crypto.randomBytes(20).toString('hex');
-
-            user.token = token;
-            await user.save();
-            return res
-                .status(httpStatus.OK)
-                .json({
-                    "message": "User logged in successfuly",
-                    "token": token,
-                    "success": true
-                })
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(httpStatus.UNAUTHORIZED).json({
+                message: "Invalid password",
+                success: false
+            });
         }
+
+
+        let token = crypto.randomBytes(20).toString('hex');
+
+        user.token = token;
+        await user.save();
+
+        return res.status(httpStatus.OK).json({
+            message: "User logged in successfully",
+            token,
+            success: true
+        });
     } catch (error) {
         res
             .status(httpStatus.INTERNAL_SERVER_ERROR)

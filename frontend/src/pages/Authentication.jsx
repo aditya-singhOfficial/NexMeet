@@ -1,20 +1,49 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import backgroundImg from "../assets/background1.png";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
-import { Link, useSearchParams } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { AuthContext } from "../contexts/AuthContext";
 const Authentication = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const query = searchParams.get("mode");
-  console.log(query);
   const [isLogin, setIsLogin] = useState(query !== "signup");
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState();
-  const [messages, setMessages] = useState();
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState();
 
   const [open, setOpen] = useState(false);
+
+  const { handleRegister, handleLogin } = useContext(AuthContext);
+  const handleAuth = async (e) => {
+    e.preventDefault();
+    try {
+      if (isLogin) {
+        let result = await handleLogin(username, password);
+        setMessage(result);
+        setOpen(true);
+      } else {
+        let result = await handleRegister(name, username, password);
+        setMessage(result);
+        setOpen(true);
+        navigate("/auth?mode=signin");
+      }
+    } catch (error) {
+      console.log(error);
+      let message = error.response.data.message;
+      setError(message);
+      setMessage(message);
+      setOpen(true);
+    }
+  };
+
+  const handleSnackbarClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     setIsLogin(query !== "signup");
@@ -76,23 +105,31 @@ const Authentication = () => {
               </div>
               {isLogin ? (
                 <LoginTemplate
-                  setError={setError}
+                  error={error}
                   setPassword={setPassword}
                   setUsername={setUsername}
                   setIsLogin={setIsLogin}
+                  handleAuth={handleAuth}
                 />
               ) : (
                 <SignUpTemplate
-                  setError={setError}
+                  error={error}
                   setPassword={setPassword}
                   setName={setName}
                   setUsername={setUsername}
                   setIsLogin={setIsLogin}
+                  handleAuth={handleAuth}
                 />
               )}
             </div>
           </div>
         </div>
+        <Snackbar
+          open={open}
+          autoHideDuration={4000}
+          message={message}
+          onClose={handleSnackbarClose}
+        />
       </div>
     </>
   );
@@ -102,15 +139,16 @@ export default Authentication;
 
 const SignUpTemplate = ({
   setIsLogin,
-  setError,
+  error,
   setPassword,
   setName,
   setUsername,
+  handleAuth,
 }) => {
   return (
     <>
-      <form action="#" method="post" className="flex flex-col gap-6 px-6 pt-2">
-        <div className="flex flex-col gap-3">
+      <form className="flex flex-col gap-4 px-6 pb-8 pt-2">
+        <div className="flex flex-col gap-2">
           <label className="pl-1" htmlFor="email">
             Name:
           </label>
@@ -152,13 +190,17 @@ const SignUpTemplate = ({
             }}
           />
         </div>
-        <input
+        <p className="text-red-700">{error}</p>
+        <button
+          onClick={handleAuth}
           className="bg-blue-500 text-white p-1.5 rounded-sm cursor-pointer"
           type="submit"
           value={"SIGN UP"}
-        />
+        >
+          SIGN UP
+        </button>
       </form>
-      <div className="flex justify-between pl-6 pr-8 pt-4 text-sm">
+      {/* <div className="flex justify-between pl-6 pr-8 pt-4 text-sm">
         <Link className="text-blue-700">Forget Password?</Link>
         <Link className="text-blue-700">
           Already have account?{" "}
@@ -169,15 +211,21 @@ const SignUpTemplate = ({
             Signin
           </span>
         </Link>
-      </div>
+      </div> */}
     </>
   );
 };
 
-const LoginTemplate = ({ setIsLogin, setError, setPassword, setUsername }) => {
+const LoginTemplate = ({
+  setIsLogin,
+  error,
+  setPassword,
+  setUsername,
+  handleAuth,
+}) => {
   return (
     <>
-      <form action="#" method="post" className="flex flex-col gap-8 px-6 pt-4">
+      <form className="flex flex-col gap-4 px-6 pt-4 pb-8">
         <div className="flex flex-col gap-3">
           <label className="pl-1" htmlFor="username">
             Username:
@@ -206,13 +254,16 @@ const LoginTemplate = ({ setIsLogin, setError, setPassword, setUsername }) => {
             }}
           />
         </div>
-        <input
+        <p className="text-red-700">{error}</p>
+        <button
+          onClick={handleAuth}
           className="bg-blue-500 text-white p-1.5 cursor-pointer hover:bg-blue-700 rounded-sm"
           type="submit"
-          value={"SIGN IN"}
-        />
+        >
+          SIGN IN
+        </button>
       </form>
-      <div className="flex justify-between pl-6 pr-8 pt-4 text-sm">
+      {/* <div className="flex justify-between pl-6 pr-8 pt-4 text-sm">
         <Link className="text-blue-700">Forget Password?</Link>
         <button className="text-blue-700 cursor-pointer">
           Don't have account?{" "}
@@ -223,7 +274,7 @@ const LoginTemplate = ({ setIsLogin, setError, setPassword, setUsername }) => {
             Sign up
           </span>
         </button>
-      </div>
+      </div> */}
     </>
   );
 };
