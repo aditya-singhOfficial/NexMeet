@@ -45,11 +45,39 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getHistoryOfUser = async () => {
+    try {
+      let request = await api.get("/get_all_activity", {
+        params: {
+          token: localStorage.getItem("token"),
+        },
+      });
+      return request.data.message;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const addToUserHistory = async (meetingCode) => {
+    try {
+      let request = await api.post("/add_to_activity", {
+        params: {
+          token: localStorage.getItem("token"),
+          meeting_code: meetingCode,
+        },
+      });
+      return request.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const data = {
     userData,
     setUserData,
     handleRegister,
     handleLogin,
+    getHistoryOfUser,
   };
 
   return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
