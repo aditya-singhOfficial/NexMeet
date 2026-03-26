@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto'
 import { User } from '../models/user.model.js';
+import { Meeting } from '../models/meeting.model.js'
 
 const register = async (req, res) => {
     const { name, username, password } = req.body;
@@ -108,4 +109,68 @@ const login = async (req, res) => {
     }
 }
 
-export { login, register }
+const getUserHistory = async (req, res) => {
+    const { token } = req.query;
+    try {
+        const user = await User.findOne({ token: token });
+
+        if (!user) {
+            return res.status(httpStatus.NOT_FOUND).json({
+                message: "User not found",
+                success: false
+            });
+        }
+
+
+        const meetings = await Meeting.find({ user_id: user.username });
+        res
+            .status(httpStatus.OK)
+            .json({
+                "message": meetings,
+                "success": true
+            })
+    } catch (error) {
+        res
+            .status(httpStatus.INTERNAL_SERVER_ERROR)
+            .json({
+                "message": `Something went wrong! ${error}`
+            })
+    }
+}
+
+const addToHistory = async (req, res) => {
+    const { token, meeting_code } = req.body;
+
+    try {
+        const user = await User.findOne({ token: token });
+
+        if (!user) {
+            return res.status(httpStatus.NOT_FOUND).json({
+                message: "User not found",
+                success: false
+            });
+        }
+        const newMeeting = new Meeting({
+            user_id: user.username,
+            meetingCode: meeting_code
+        });
+
+        await newMeeting.save();
+
+        res
+            .status(httpStatus.CREATED)
+            .json({
+                "message": "Added to history",
+                "success": false
+            })
+    } catch (error) {
+        res
+            .status(httpStatus.INTERNAL_SERVER_ERROR)
+            .json({
+                "message": `Something went wrong! ${error}`
+            })
+    }
+
+}
+
+export { login, register, getUserHistory, addToHistory }
