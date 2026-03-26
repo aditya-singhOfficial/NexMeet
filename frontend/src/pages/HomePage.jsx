@@ -58,7 +58,7 @@ const HomePage = () => {
           <button
             className="flex items-center gap-2 text-gray-300 hover:text-[#FFC107] transition-colors font-medium cursor-pointer"
             onClick={() => {
-              /* Navigate to history */
+              navigate("/history")
             }}
           >
             <RestoreIcon fontSize="small" />
