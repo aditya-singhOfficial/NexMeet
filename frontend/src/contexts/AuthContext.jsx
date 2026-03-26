@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (request.status === httpStatus.OK) {
-        return request.data.message;
+        return request.data;
       }
     } catch (error) {
       throw error;

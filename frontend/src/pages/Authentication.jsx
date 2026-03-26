@@ -24,13 +24,17 @@ const Authentication = () => {
     try {
       if (isLogin) {
         let result = await handleLogin(username, password);
-        setMessage(result);
+        setMessage(result.message);
+        localStorage.setItem("token", result.token);
         setOpen(true);
+        navigate("/home");
+        setError("");
       } else {
         let result = await handleRegister(name, username, password);
         setMessage(result);
         setOpen(true);
         navigate("/auth?mode=signin");
+        setError("");
       }
     } catch (error) {
       console.log(error);
@@ -50,6 +54,7 @@ const Authentication = () => {
     setUsername("");
     setName("");
     setPassword("");
+    setError("");
   }, [query]);
 
   return (
