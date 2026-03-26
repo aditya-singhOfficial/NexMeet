@@ -58,7 +58,7 @@ const HomePage = () => {
           <button
             className="flex items-center gap-2 text-gray-300 hover:text-[#FFC107] transition-colors font-medium cursor-pointer"
             onClick={() => {
-              navigate("/history")
+              navigate("/history");
             }}
           >
             <RestoreIcon fontSize="small" />
@@ -133,7 +133,9 @@ const HomePage = () => {
               />
               <Button
                 variant="text"
-                onClick={handleVideoCall}
+                onClick={(e) => {
+                  navigate(`/${meetingCode}`);
+                }}
                 disabled={!meetingCode.trim()}
                 className={`normal-case! text-lg! font-bold ${
                   meetingCode.trim()
