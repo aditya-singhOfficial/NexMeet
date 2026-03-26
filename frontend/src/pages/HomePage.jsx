@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import withAuth from "../utils/withAuth";
 import { useNavigate } from "react-router-dom";
 import { Button, TextField } from "@mui/material";
@@ -6,14 +6,21 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import remoteMeeting from "../assets/remote-meeting1.png";
+import { AuthContext } from "../contexts/AuthContext";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const [meetingCode, setMeetingCode] = useState("");
 
-  const handleVideoCall = () => {
-    if (meetingCode.trim()) {
-      navigate(`/${meetingCode}`);
+  const { addToUserHistory } = useContext(AuthContext);
+
+  const handleVideoCall = async (code) => {
+    const finalCode = code || meetingCode;
+
+    if (finalCode.trim()) {
+      console.log(localStorage.getItem("token"));
+      await addToUserHistory(finalCode);
+      navigate(`/${finalCode}`);
     }
   };
 
@@ -33,7 +40,8 @@ const HomePage = () => {
 
   const startNewMeeting = () => {
     const randomCode = generateMeetingCode();
-    navigate(`/${randomCode}`);
+    setMeetingCode(randomCode);
+    handleVideoCall(randomCode);
   };
 
   return (
@@ -105,8 +113,6 @@ const HomePage = () => {
                 size="medium"
                 className="w-full sm:w-64"
                 inputProps={{ style: { color: "white" } }}
-                by
-                user
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     paddingLeft: "32px",

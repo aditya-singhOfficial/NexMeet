@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
 
   const getHistoryOfUser = async () => {
     try {
-      let request = await api.get("/get_all_activity", {
+      let request = await api.post("/get_all_activity", {
         params: {
           token: localStorage.getItem("token"),
         },
@@ -61,10 +61,8 @@ export const AuthProvider = ({ children }) => {
   const addToUserHistory = async (meetingCode) => {
     try {
       let request = await api.post("/add_to_activity", {
-        params: {
-          token: localStorage.getItem("token"),
-          meeting_code: meetingCode,
-        },
+        token: localStorage.getItem("token"),
+        meeting_code: meetingCode,
       });
       return request.data;
     } catch (error) {
@@ -78,6 +76,7 @@ export const AuthProvider = ({ children }) => {
     handleRegister,
     handleLogin,
     getHistoryOfUser,
+    addToUserHistory,
   };
 
   return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
