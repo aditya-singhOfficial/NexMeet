@@ -271,7 +271,7 @@ Open in browser:
 
 - Configure **SPA rewrites** to avoid 404 on routes  
 - Enable **CORS** for frontend domain  
-- Deploy using **Render / Vercel**  
+- Deploy using **Render**  
 
 ---
 
