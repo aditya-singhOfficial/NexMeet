@@ -60,52 +60,56 @@ const Authentication = () => {
   return (
     <>
       <div
-        className="flex flex-col w-full h-screen "
-        style={{ background: `url(${backgroundImg})` }}
+        className="flex flex-col w-full min-h-screen overflow-y-auto"
+        style={{ background: `url(${backgroundImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
-        <div className="w-full h-full bg-black/50">
+        <div className="w-full min-h-screen bg-black/60 flex flex-col">
           <Navbar />
-          <div className="flex w-full py-7 px-12">
-            <div className="w-[60%] flex flex-col gap-8 h-[75vh] justify-center">
+          <div className="flex flex-col lg:flex-row w-full py-7 px-6 md:px-12 gap-10 lg:gap-0 items-center justify-center flex-1 pb-10">
+            
+            {/* Left Hero Content - Hidden on small screens to save space, visible on md and up */}
+            <div className="w-full lg:w-[60%] hidden md:flex flex-col gap-8 justify-center text-center lg:text-left">
               <div className="w-full flex flex-col gap-12">
                 <div className="w-full flex flex-col gap-1">
-                  <h1 className="text-7xl text-white tracking-wide font-bold leading-tight">
+                  <h1 className="text-4xl md:text-5xl lg:text-7xl text-white tracking-wide font-bold leading-tight">
                     <span className="text-yellow-500">Connect</span> with your
                     Loved Ones
                   </h1>
-                  <h2 className="text-3xl text-gray-400">
+                  <h2 className="text-xl md:text-2xl lg:text-3xl text-gray-300">
                     Cover a distance by NexMeet video call
                   </h2>
                 </div>
               </div>
             </div>
-            <div className="w-[40%] h-full text-white bg-white/10 py-3 rounded-md">
+
+            {/* Right Authentication Form */}
+            <div className="w-full sm:w-[80%] md:w-[60%] lg:w-[40%] text-white bg-white/10 py-3 rounded-xl shadow-2xl backdrop-blur-md border border-white/20">
               <div className="flex flex-col items-center gap-4 pt-4">
                 <LockOpenIcon
                   sx={{ fontSize: 36, color: `white` }}
-                  className="bg-purple-500 px-2 py-1 rounded-full font-black"
+                  className="bg-purple-500 px-2 py-1 rounded-full font-black shadow-lg"
                 />
-                <div className="flex gap-6 items-center ">
-                  <Link
-                    to={"/auth?mode=signin"}
-                    className={`font-medium px-2 py-1 cursor-pointer rounded-sm ${
+                <div className="flex gap-4 sm:gap-6 items-center bg-black/20 p-1 rounded-md">
+                  <button
+                    onClick={() => navigate("/auth?mode=signin")}
+                    className={`font-medium px-4 py-1.5 cursor-pointer rounded-md transition-all ${
                       isLogin
-                        ? "bg-blue-500 text-white"
-                        : "text-gray-400 hover:text-blue-500"
+                        ? "bg-blue-500 text-white shadow-md"
+                        : "text-gray-300 hover:text-white"
                     }`}
                   >
                     Sign In
-                  </Link>
-                  <Link
-                    to={"/auth?mode=signup"}
-                    className={`font-medium px-2 py-1 cursor-pointer rounded-sm ${
+                  </button>
+                  <button
+                    onClick={() => navigate("/auth?mode=signup")}
+                    className={`font-medium px-4 py-1.5 cursor-pointer rounded-md transition-all ${
                       !isLogin
-                        ? "bg-blue-500 text-white"
-                        : "text-gray-400 hover:text-blue-500"
+                        ? "bg-blue-500 text-white shadow-md"
+                        : "text-gray-300 hover:text-white"
                     }`}
                   >
                     Sign Up
-                  </Link>
+                  </button>
                 </div>
               </div>
               {isLogin ? (

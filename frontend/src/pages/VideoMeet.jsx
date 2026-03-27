@@ -12,6 +12,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import server from "../environment";
+import { useNavigate } from "react-router-dom";
 
 const server_url = server;
 
@@ -25,6 +26,7 @@ export default function VideoMeetComponent() {
   var socketRef = useRef();
   let socketIdRef = useRef();
   let localVideoref = useRef();
+  const navigate = useNavigate();
 
   let [videoAvailable, setVideoAvailable] = useState(true);
   let [audioAvailable, setAudioAvailable] = useState(true);
@@ -439,7 +441,7 @@ export default function VideoMeetComponent() {
       let tracks = localVideoref.current.srcObject.getTracks();
       tracks.forEach((track) => track.stop());
     } catch (e) {}
-    window.location.href = "/home";
+    navigate("/home");
   };
 
   let handleMessage = (e) => {
