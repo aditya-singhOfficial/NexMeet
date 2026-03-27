@@ -112,7 +112,7 @@ Database (MongoDB)
 
 ### 🧑‍💻 User Dashboard  
 <div align="center">
-  <img src="./preview/userHomePage.png" width="800" />
+  <img src="./preview/userDashboard.png" width="800" />
 </div>
 
 ---
