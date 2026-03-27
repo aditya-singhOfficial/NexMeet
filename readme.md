@@ -207,7 +207,7 @@ NexMeet/
 #### 1. Clone Repository  
 
 ```bash
-git clone https://github.com/yourusername/nexmeet.git
+git clone https://github.com/aditya-singhOfficial/nexmeet.git
 cd nexmeet
 ```
 
