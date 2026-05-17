@@ -207,7 +207,7 @@ NexMeet/
 #### 1. Clone Repository  
 
 ```bash
-git clone https://github.com/yourusername/nexmeet.git
+git clone https://github.com/aditya-singhOfficial/nexmeet.git
 cd nexmeet
 ```
 
@@ -271,7 +271,7 @@ Open in browser:
 
 - Configure **SPA rewrites** to avoid 404 on routes  
 - Enable **CORS** for frontend domain  
-- Deploy using **Render / Vercel**  
+- Deploy using **Render**  
 
 ---
 
