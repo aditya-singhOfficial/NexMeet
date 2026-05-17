@@ -5,6 +5,7 @@ import Snackbar from "@mui/material/Snackbar";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { AuthContext } from "../contexts/AuthContext";
+
 const Authentication = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -21,9 +22,11 @@ const Authentication = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { handleRegister, handleLogin } = useContext(AuthContext);
+
   const handleAuth = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
     try {
       if (isLogin) {
         let result = await handleLogin(username, password);
@@ -41,7 +44,9 @@ const Authentication = () => {
       }
     } catch (error) {
       console.log(error);
-      let message = error.response?.data?.message || "An error occurred";
+      let message =
+        error.response?.data?.message ||
+        "An error occurred during authentication.";
       setError(message);
       setMessage(message);
       setOpen(true);
@@ -64,6 +69,40 @@ const Authentication = () => {
 
   return (
     <>
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/80 backdrop-blur-md transition-all duration-300">
+          <div className="flex flex-col items-center justify-center">
+            <svg
+              className="animate-spin h-16 w-16 text-blue-500 mb-6 drop-shadow-[0_0_15px_rgba(59,130,246,0.8)]"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+
+            <h2 className="text-white text-xl md:text-2xl font-bold tracking-[0.2em] animate-pulse">
+              {isLogin ? "AUTHENTICATING..." : "CREATING ACCOUNT..."}
+            </h2>
+            <p className="text-gray-400 mt-2 text-sm tracking-wide animate-pulse">
+              Please wait while we secure your connection
+            </p>
+          </div>
+        </div>
+      )}
+
       <div
         className="flex flex-col w-full min-h-screen overflow-y-auto"
         style={{
@@ -75,7 +114,6 @@ const Authentication = () => {
         <div className="w-full min-h-screen bg-black/60 flex flex-col">
           <Navbar />
           <div className="flex flex-col lg:flex-row w-full py-7 px-6 md:px-12 gap-10 lg:gap-0 items-center justify-center flex-1 pb-10">
-            {/* Left Hero Content - Hidden on small screens to save space, visible on md and up */}
             <div className="w-full lg:w-[60%] hidden md:flex flex-col gap-8 justify-center text-center lg:text-left">
               <div className="w-full flex flex-col gap-12">
                 <div className="w-full flex flex-col gap-1">
@@ -90,7 +128,6 @@ const Authentication = () => {
               </div>
             </div>
 
-            {/* Right Authentication Form */}
             <div className="w-full sm:w-[80%] md:w-[60%] lg:w-[40%] text-white bg-white/10 py-3 rounded-xl shadow-2xl backdrop-blur-md border border-white/20">
               <div className="flex flex-col items-center gap-4 pt-4">
                 <LockOpenIcon
@@ -120,6 +157,7 @@ const Authentication = () => {
                   </button>
                 </div>
               </div>
+
               {isLogin ? (
                 <LoginTemplate
                   error={error}
@@ -127,7 +165,6 @@ const Authentication = () => {
                   setUsername={setUsername}
                   setIsLogin={setIsLogin}
                   handleAuth={handleAuth}
-                  isLoading={isLoading}
                 />
               ) : (
                 <SignUpTemplate
@@ -137,7 +174,6 @@ const Authentication = () => {
                   setUsername={setUsername}
                   setIsLogin={setIsLogin}
                   handleAuth={handleAuth}
-                  isLoading={isLoading}
                 />
               )}
             </div>
@@ -163,17 +199,20 @@ const SignUpTemplate = ({
   setName,
   setUsername,
   handleAuth,
-  isLoading,
 }) => {
   return (
     <>
-      <form className="flex flex-col gap-4 px-6 pb-8 pt-2">
+      <form
+        className="flex flex-col gap-4 px-6 pb-8 pt-2"
+        onSubmit={handleAuth}
+      >
         <div className="flex flex-col gap-2">
-          <label className="pl-1" htmlFor="email">
+          <label className="pl-1" htmlFor="name">
             Name:
           </label>
           <input
-            className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md"
+            id="name"
+            className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md text-black"
             type="text"
             placeholder="Enter Full Name"
             required
@@ -187,7 +226,8 @@ const SignUpTemplate = ({
             Username:
           </label>
           <input
-            className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md"
+            id="username"
+            className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md text-black"
             type="text"
             placeholder="Enter Username"
             required
@@ -201,7 +241,8 @@ const SignUpTemplate = ({
             Password:
           </label>
           <input
-            className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md"
+            id="password"
+            className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md text-black"
             type="password"
             placeholder="Enter Password"
             required
@@ -210,54 +251,14 @@ const SignUpTemplate = ({
             }}
           />
         </div>
-        <p className="text-red-700">{error}</p>
+        <p className="text-red-500 font-medium text-sm">{error}</p>
         <button
-          onClick={handleAuth}
-          className="bg-blue-500 text-white p-1.5 rounded-sm cursor-pointer"
+          className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors font-semibold shadow-md cursor-pointer"
           type="submit"
-          value={"SIGN UP"}
         >
-          {isLoading ? (
-            <>
-              <svg
-                className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              Signing Up...
-            </>
-          ) : (
-            "SIGN UP"
-          )}
+          SIGN UP
         </button>
       </form>
-      {/* <div className="flex justify-between pl-6 pr-8 pt-4 text-sm">
-        <Link className="text-blue-700">Forget Password?</Link>
-        <Link className="text-blue-700">
-          Already have account?{" "}
-          <span
-            onClick={() => setIsLogin(true)}
-            className="underline cursor-pointer"
-          >
-            Signin
-          </span>
-        </Link>
-      </div> */}
     </>
   );
 };
@@ -268,17 +269,20 @@ const LoginTemplate = ({
   setPassword,
   setUsername,
   handleAuth,
-  isLoading,
 }) => {
   return (
     <>
-      <form className="flex flex-col gap-4 px-6 pt-4 pb-8">
+      <form
+        className="flex flex-col gap-4 px-6 pt-4 pb-8"
+        onSubmit={handleAuth}
+      >
         <div className="flex flex-col gap-3">
-          <label className="pl-1" htmlFor="username">
+          <label className="pl-1" htmlFor="login-username">
             Username:
           </label>
           <input
-            className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md"
+            id="login-username"
+            className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md text-black"
             type="text"
             placeholder="Enter Username"
             required
@@ -288,11 +292,12 @@ const LoginTemplate = ({
           />
         </div>
         <div className="flex flex-col gap-3">
-          <label className="pl-1" htmlFor="password">
+          <label className="pl-1" htmlFor="login-password">
             Password:
           </label>
           <input
-            className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md"
+            id="login-password"
+            className="outline-none border border-gray-200 px-2 py-3 rounded-md text-md text-black"
             type="password"
             placeholder="Enter Password"
             required
@@ -301,53 +306,14 @@ const LoginTemplate = ({
             }}
           />
         </div>
-        <p className="text-red-700">{error}</p>
+        <p className="text-red-500 font-medium text-sm">{error}</p>
         <button
-          onClick={handleAuth}
-          className="bg-blue-500 text-white p-1.5 cursor-pointer hover:bg-blue-700 rounded-sm"
+          className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors font-semibold shadow-md cursor-pointer"
           type="submit"
         >
-          {isLoading ? (
-            <>
-              <svg
-                className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              Signing In...
-            </>
-          ) : (
-            "SIGN IN"
-          )}
+          SIGN IN
         </button>
       </form>
-      {/* <div className="flex justify-between pl-6 pr-8 pt-4 text-sm">
-        <Link className="text-blue-700">Forget Password?</Link>
-        <button className="text-blue-700 cursor-pointer">
-          Don't have account?{" "}
-          <span
-            onClick={() => setIsLogin(false)}
-            className="underline cursor-pointer"
-          >
-            Sign up
-          </span>
-        </button>
-      </div> */}
     </>
   );
 };
